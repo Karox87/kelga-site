@@ -1,2007 +1,248 @@
 <!DOCTYPE html>
-<!-- saved from url=(0044)https://easylinks-editor.porkbun.com/account -->
-<html lang="en" class="h-100"><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Required meta tags -->
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <script src="./kelga_privacy_policy_files/main.js.download"></script>
-
-    <link href="./kelga_privacy_policy_files/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-    <link href="./kelga_privacy_policy_files/all.min.css" rel="stylesheet">
-
-    <script src="./kelga_privacy_policy_files/bootstrap.bundle.min.js.download" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="./kelga_privacy_policy_files/jquery-3.6.0.min.js.download" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="./kelga_privacy_policy_files/main.css">
-
-    <title>Link In Bio</title>
-  </head>
-  <body class="d-flex flex-column h-100" __processed_e355d27b-6edb-4141-8009-e5f910c27da7__="true">
-<header>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="https://easylinks-editor.porkbun.com/account"><img alt="Porkbun Logo" src="./kelga_privacy_policy_files/android-icon-36x36.png"> Link In Bio Editor</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-        <!-- li class="nav-item">
-          <a class="nav-link" href="/account">Editor</a>
-        </li -->
-        <li class="nav-item">
-          <a class="nav-link" href="https://easylinks-editor.porkbun.com/account/logout">Exit</a>
-        </li>
-
-      </ul>
-    </div>
-  </div>
-</nav>
-</header>
-
-<main class="flex-shrink-0 mb-4">
-    <div class="container">
-    <div class="alert alert-info mt-4 d-none alert-dismissible" role="alert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-<link rel="stylesheet" href="./kelga_privacy_policy_files/editor.css">
-<link rel="stylesheet" href="./kelga_privacy_policy_files/croppie.css">
-
-<script src="./kelga_privacy_policy_files/croppie.min.js.download"></script>
-<script src="./kelga_privacy_policy_files/canvas.js.download"></script>
-
-<script>
-	var linkAnimationTypes = {'animationPulse':'pulse', 'animationBounce':'bounce', 'animationShake':'shake'};
-</script>
-
-<div aria-labelledby="modal_easyLinksAddLink_title" id="modal_easyLinksAddLink" class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="modal_easyLinksAddLink_title" class="modal-title">Add Link</h4>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-	<div class="alert alert-info" style="display:none;">
-	</div>
-	<div>
-	  <input id="easyLinksAddLink_domain" type="hidden" value="kelga.link">
-	  <input aria-label="link title" id="easyLinksAddLink_title" class="form-control" type="text" placeholder="Link Title">
-	  <br>
-	  <input aria-label="url" id="easyLinksAddLink_url" class="form-control" type="text" placeholder="URL">
-	  <br>
-	  <div>
-<label class="switchNew">
-  <span class="visually-hidden">Show Link</span>
-  <input id="easyLinksAddLink_status" value="on" type="checkbox">
-  <span class="slider"></span>
-</label>
-<label style="vertical-align:sub; font-size:large;">Show Link</label></div>
-	</div>
-      </div>
-      <div class="modal-footer">
-	<img alt="Loading..." id="modal_easyLinksAddLink_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	<div id="modal_easyLinksAddLink_buttons" class="modal-footer-buttons">
-	  <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancel</button>
-	  <button class="btn btn-primary btn-lg" onclick="easyLinksAddLinkSave();">Save</button>
-	</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function easyLinksAddLinkSave()
-{
-	var title = jQuery.trim($('#easyLinksAddLink_title').val());
-	var url = jQuery.trim($('#easyLinksAddLink_url').val());
-	var status = $('#easyLinksAddLink_status').is(":checked");
-	var domain = jQuery.trim($('#easyLinksAddLink_domain').val());
-
-	$('#modal_easyLinksAddLink_loading').show();
-	$('#modal_easyLinksAddLink_buttons').hide();
-
-        $.post("/api/easyLinksAddLinkSave", {title:title, url:url, status:status, domain:domain},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-                        alert(data['message']);
-
-			$('#modal_easyLinksAddLink_loading').hide();
-			$('#modal_easyLinksAddLink_buttons').show();
-                }
-                else
-                {
-			window.location.reload();
-                }
-        }, "json");
-}
-</script>
-
-<style>
-</style>
-<div aria-labelledby="modal_easyLinksImageCrop_title" id="modal_easyLinksImageCrop" class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" style="" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="modal_easyLinksImageCrop_title" class="modal-title">Adjust Your Image</h4>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-	<div class="alert alert-info" style="display:none;">
-	</div>
-	<div id="modal_easyLinksImageCrop_container" style="">
-	</div>
-      </div>
-      <div class="modal-footer">
-	<img alt="Loading..." id="modal_easyLinksImageCrop_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	<div id="modal_easyLinksImageCrop_buttons" class="modal-footer-buttons">
-	  <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancel</button>
-	  <button class="btn btn-primary btn-lg" onclick="easyLinksImageCropSave();">Save</button>
-	</div>
-      </div>
-    </div>
-  </div>
-  <form id="modal_easyLinksImageCrop_form" data-domain="kelga.link" method="POST">
-    <input type="hidden" name="setting" value="">
-    <input type="hidden" name="id" value="">
-    <input type="hidden" name="height" value="">
-    <input type="hidden" name="width" value="">
-  <input class="formCsrf" type="hidden" name="csrf_token_1" value="828d51a0f77d65a3b98d2b0e580208e5"></form>
-</div>
-
-<script>
-function easyLinksImageCropSave()
-{
-        var formData = new FormData($("#modal_easyLinksImageCrop_form").get(0));
-	var domain = $("#modal_easyLinksImageCrop_form").attr('data-domain');
-	var setting = $('#modal_easyLinksImageCrop_form').find('input[name="setting"]').val();
-	var id = $('#modal_easyLinksImageCrop_form').find('input[name="id"]').val();
-	var height = $('#modal_easyLinksImageCrop_form').find('input[name="height"]').val();
-	var width = $('#modal_easyLinksImageCrop_form').find('input[name="width"]').val();
-
-        formData.append("domain", domain);
-        formData.append("setting", setting);
-        formData.append("id", id);
-
-	var resultSize = 'viewport';
-	var resultQuality = 1;
-	if(setting == 'image-profile')
-	{
-		resultSize = 'original';
-		resultQuality = .6;
-
-		if(height > 500 || width > 500)
-		{
-			resultSize = {width:500, height:500};
-		}
-	}
-
-	$('#modal_easyLinksImageCrop_container').croppie('result', {type:'base64', size:resultSize, format:'jpeg', quality:resultQuality, backgroundColor:'white'}).then(function(blob)
-	{
-	        formData.append("blob", blob);
-
-	        $.ajax(
-        	{
-	                url: "/api/easyLinksImageCropSave",
-                	data: formData,
-        	        processData: false,
-	                contentType: false,
-                	type: 'POST',
-        	        beforeSend:function(jqXHR, Obj)
-	                {
-                	},
-        	        success: function(data)
-	                {
-        	                var response = jQuery.parseJSON(data);
-
-	                        if(response['error'] == 1)
-                        	{
-                	                alert(response['message']);
-        	                }
-	                        else
-                        	{
-					if(setting == 'image-profile')
-					{
-						$('#easyLinks_avatar').attr('src', blob);
-					}
-					else if(setting == 'image-link')
-					{
-						$('#easyLinks_linkImage_'+id).attr('src', blob);
-						$('#easyLinks_linkImage_'+id).show();
-					}
-
-					$('#modal_easyLinksImageCrop').modal('hide');
-                        	}
-
-				formData = new FormData();
-        	        }
-	        });
-	});
-}
-</script>
-<div aria-labelledby="modal_easyLinksEditLink_title" id="modal_easyLinksEditLink" class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="modal_easyLinksEditLink_title" class="modal-title">Edit Link</h4>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-	<div class="alert alert-info" style="display:none;">
-	</div>
-	<div>
-	  <input id="easyLinksEditLink_domain" type="hidden" value="kelga.link">
-	  <input id="easyLinksEditLink_id" type="hidden" value="">
-	  <input aria-label="link title" id="easyLinksEditLink_title" class="form-control" type="text" placeholder="Link Title">
-	  <br>
-	  <input aria-label="url" id="easyLinksEditLink_url" class="form-control" type="text" placeholder="URL">
-	</div>
-      </div>
-      <div class="modal-footer">
-	<img alt="Loading..." id="modal_easyLinksEditLink_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	<div id="modal_easyLinksEditLink_buttons" class="modal-footer-buttons">
-	  <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancel</button>
-	  <button class="btn btn-primary btn-lg" onclick="easyLinksEditLinkSave();">Save</button>
-	</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function easyLinksEditLinkSave()
-{
-	var title = jQuery.trim($('#easyLinksEditLink_title').val());
-	var url = jQuery.trim($('#easyLinksEditLink_url').val());
-	var domain = jQuery.trim($('#easyLinksEditLink_domain').val());
-	var id = jQuery.trim($('#easyLinksEditLink_id').val());
-
-	$('#modal_easyLinksEditLink_loading').show();
-	$('#modal_easyLinksEditLink_buttons').hide();
-
-        $.post("/api/easyLinksEditLinkSave", {title:title, url:url, domain:domain, id:id},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-                        alert(data['message']);
-
-			$('#modal_easyLinksEditLink_loading').hide();
-			$('#modal_easyLinksEditLink_buttons').show();
-                }
-                else
-                {
-			window.location.reload();
-                }
-        }, "json");
-}
-</script>
-<div aria-labelledby="modal_easyLinksAnimation_title" id="modal_easyLinksAnimation" class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="modal_easyLinksAnimation_title" class="modal-title">Link Animation</h4>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-	<div class="alert alert-info" style="display:none;">
-	</div>
-	<div>
-	  <input id="easyLinksAnimation_domain" type="hidden" value="kelga.link">
-	  <input id="easyLinksAnimation_id" type="hidden" value="">
-	  <select aria-label="animation style" id="easyLinksAnimation_animationType" class="form-select" onchange="easyLinksAnimationSelect();">
-	    <option value="">none</option>
-	    <option value="animationPulse">pulse</option>
-	    <option value="animationBounce">bounce</option>
-	    <option value="animationShake">shake</option>
-	  </select>
-	  <br>
-	  <div id="easyLinksAnimation_demo" class="alert alert-secondary" style="height:70px; width:100%;"><center id="easyLinksAnimation_demoText" style="padding-top:5px;">no animation</center></div>
-	</div>
-      </div>
-      <div class="modal-footer">
-	<img alt="Loading..." id="modal_easyLinksAnimation_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	<div id="modal_easyLinksAnimation_buttons" class="modal-footer-buttons">
-	  <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancel</button>
-	  <button class="btn btn-primary btn-lg" onclick="easyLinksAnimationSave();">Save</button>
-	</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function easyLinksAnimationSelect()
-{
-	var domain = jQuery.trim($('#easyLinksAnimation_domain').val());
-	var id = jQuery.trim($('#easyLinksAnimation_id').val());
-	var type = jQuery.trim($('#easyLinksAnimation_animationType').val());
-
-	$("#easyLinksAnimation_demo").removeClass (function (index, className) {return (className.match (/(^|\s)animation\S+/g) || []).join(' ');});
-
-	if(type)
-	{
-		$("#easyLinksAnimation_demoText").html(linkAnimationTypes[type]);
-		$("#easyLinksAnimation_demo").addClass(type);
-	}
-	else
-	{
-		$("#easyLinksAnimation_demoText").html('no animation');
-	}
-}
-
-function easyLinksAnimationSave()
-{
-	var domain = jQuery.trim($('#easyLinksAnimation_domain').val());
-	var id = jQuery.trim($('#easyLinksAnimation_id').val());
-	var type = jQuery.trim($('#easyLinksAnimation_animationType').val());
-
-	$('#modal_easyLinksAnimation_loading').show();
-	$('#modal_easyLinksAnimation_buttons').hide();
-
-        $.post("/api/easyLinksAnimationSave", {type:type, domain:domain, id:id},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-                        if(data['switchPlansPrompt'])
-                        {
-                                if(confirm(data['message']))
-                                {
-                                        window.location = "/account/upgrade";
-                                }
-                        }
-                        else
-                        {
-                                alert(data['message']);
-                        }
-                }
-                else
-                {
-			if(type)
-				$('#easyLinks_linkAnimation_'+id).addClass('text-porkbun');
-			else
-				$('#easyLinks_linkAnimation_'+id).removeClass('text-porkbun');
-
-			$('#modal_easyLinksAnimation').modal('hide');
-                }
-
-		$('#modal_easyLinksAnimation_loading').hide();
-		$('#modal_easyLinksAnimation_buttons').show();
-        }, "json");
-}
-</script>
-
-<style>
-@keyframes shake
-{
-  0% { transform: translate(1px, 1px) rotate(0deg); }
-  1% { transform: translate(-1px, -2px) rotate(-1deg); }
-  2% { transform: translate(-3px, 0px) rotate(1deg); }
-  3% { transform: translate(3px, 2px) rotate(0deg); }
-  4% { transform: translate(1px, -1px) rotate(1deg); }
-  5% { transform: translate(-1px, 2px) rotate(-1deg); }
-  6% { transform: translate(-3px, 1px) rotate(0deg); }
-  7% { transform: translate(3px, 1px) rotate(-1deg); }
-  8% { transform: translate(-1px, -1px) rotate(1deg); }
-  9% { transform: translate(1px, 2px) rotate(0deg); }
-  10% { transform: translate(1px, -2px) rotate(-1deg); }
-  11% { transform: translate(1px, 1px) rotate(0deg); }
-}
-.animationShake
-{
-  animation: shake 5s;
-  animation-iteration-count: infinite;
-}
-
-@keyframes bounce
-{
-  0% { transform: translate(0px, -2px); }
-  1% { transform: translate(0px, -4px); }
-  2% { transform: translate(0px, -6px); }
-  3% { transform: translate(0px, -4px); }
-  4% { transform: translate(0px, -2px); }
-  5% { transform: translate(0px, -0px); }
-}
-.animationBounce
-{
-  animation: bounce 5s;
-  animation-iteration-count: infinite;
-}
-
-@keyframes pulse
-{
-  0%  {transform: scale(1.005);}
-  1%  {transform: scale(1.01);}
-  2%  {transform: scale(1.015);}
-  3%  {transform: scale(1.02);}
-  4%  {transform: scale(1.025);}
-  5%  {transform: scale(1.03);}
-  6%  {transform: scale(1.025);}
-  7%  {transform: scale(1.02);}
-  8%  {transform: scale(1.015);}
-  9%  {transform: scale(1.01);}
-  10%  {transform: scale(1.005);}
-  11%  {transform: scale(1);}
-}
-.animationPulse
-{
-  animation: pulse 5s;
-  animation-iteration-count: infinite;
-}
-</style>
-
-<div aria-labelledby="modal_easyLinksSchedule_title" id="modal_easyLinksSchedule" class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="modal_easyLinksSchedule_title" class="modal-title">Link Schedule</h4>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-	<div class="alert alert-info" style="display:none;">
-	</div>
-	<div>
-	  <input id="easyLinksSchedule_domain" type="hidden" value="kelga.link">
-	  <input id="easyLinksSchedule_id" type="hidden" value="">
-	  <div class="alert alert-info">You can schedule your link to only display after, before, or between two dates and times. Leave a field blank to ignore it.</div>
-	  <div class="row">
-	    <div class="col-sm-6">
-	      <label for="easyLinksSchedule_startDate">Start Time</label>
-	      <input id="easyLinksSchedule_startDate" class="form-control" type="datetime-local">
-	    </div>
-	    <div class="col-sm-6">
-	      <label for="easyLinksSchedule_endDate">End Time</label>
-	      <input id="easyLinksSchedule_endDate" class="form-control" type="datetime-local">
-	    </div>
-	  </div>
-	</div>
-      </div>
-      <div class="modal-footer">
-	<img alt="Loading..." id="modal_easyLinksSchedule_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	<div id="mmodal_easyLinksSchedule_buttons" class="modal-footer-buttons">
-	  <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancel</button>
-	  <button class="btn btn-primary btn-lg" onclick="easyLinksScheduleSave();">Save</button>
-	</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function easyLinksScheduleSave()
-{
-	var date = new Date();
-	var offset = date.getTimezoneOffset();
-
-	var domain = jQuery.trim($('#easyLinksSchedule_domain').val());
-	var id = jQuery.trim($('#easyLinksSchedule_id').val());
-	var startDate = jQuery.trim($('#easyLinksSchedule_startDate').val());
-	var endDate = jQuery.trim($('#easyLinksSchedule_endDate').val());
-
-	$('#modal_easyLinksSchedule_loading').show();
-	$('#modal_easyLinksSchedule_buttons').hide();
-
-        $.post("/api/easyLinksScheduleSave", {id:id, domain:domain, startDate:startDate, endDate:endDate, offset:offset},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-                        if(data['switchPlansPrompt'])
-                        {
-                                if(confirm(data['message']))
-                                {
-                                        window.location = "/account/upgrade";
-                                }
-                        }
-                        else
-                        {
-                                alert(data['message']);
-                        }
-                }
-                else
-                {
-			if(startDate || endDate)
-				$('#easyLinks_linkSchedule_'+id).addClass('text-porkbun');
-			else
-				$('#easyLinks_linkSchedule_'+id).removeClass('text-porkbun');
-
-			$('#modal_easyLinksSchedule').modal('hide');
-                }
-
-		$('#modal_easyLinksSchedule_loading').hide();
-		$('#modal_easyLinksSchedule_buttons').show();
-        }, "json");
-}
-</script>
-<div aria-labelledby="modal_easyLinksSocials_title" id="modal_easyLinksSocials" class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="modal_easyLinksSocials_title" class="modal-title">Social Links</h4>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-	<div class="alert alert-info" style="display:none;">
-	</div>
-	<div>
-	  <input id="easyLinksSocials_domain" type="hidden" value="kelga.link">
-	  <label for="easyLinksSocials_location" class="control-label">Location</label>
-	  <select id="easyLinksSocials_location" class="form-select">
-	    <option value="bottom" selected="">bottom</option>
-	    <option value="top">top</option>
-	  </select>
-	  <br>
-	  <div class="input-group mb-3"><span class="input-group-text"><i class="fas fa-envelope-square"></i></span><input aria-label="email address" id="easyLinksSocials_email" type="text" class="form-control" placeholder="Email Address"></div>
-	  <div class="input-group mb-3"><span class="input-group-text"><i class="fab fa-twitter"></i></span><input aria-label="twitter handle" id="easyLinksSocials_twitter" type="text" class="form-control" placeholder="Twitter Handle"></div>
-	  <div class="input-group mb-3"><span class="input-group-text"><i class="fab fa-facebook"></i></span><input aria-label="facebook url" id="easyLinksSocials_facebook" type="text" class="form-control" placeholder="Facebook URL"></div>
-	  <div class="input-group mb-3"><span class="input-group-text"><i class="fab fa-instagram"></i></span><input aria-label="instagram username" id="easyLinksSocials_instagram" type="text" class="form-control" placeholder="Instagram Username"></div>
-	  <div class="input-group mb-3"><span class="input-group-text"><i class="fab fa-youtube"></i></span><input aria-label="youtube url" id="easyLinksSocials_youtube" type="text" class="form-control" placeholder="YouTube URL"></div>
-	  <div class="input-group mb-3"><span class="input-group-text"><i class="fab fa-tiktok"></i></span><input aria-label="tiktok username" id="easyLinksSocials_tiktok" type="text" class="form-control" placeholder="TikTok Username"></div>
-	</div>
-      </div>
-      <div class="modal-footer">
-	<img alt="Loading..." id="modal_easyLinksSocials_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	<div id="modal_easyLinksSocials_buttons" class="modal-footer-buttons">
-	  <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancel</button>
-	  <button class="btn btn-primary btn-lg" onclick="easyLinksSocialsSave();">Save</button>
-	</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function easyLinksSocialsSave()
-{
-	var socials = {};
-	var domain = jQuery.trim($('#easyLinksSocials_domain').val());
-	var location = jQuery.trim($('#easyLinksSocials_location').val());
-
-	socials['email'] = jQuery.trim($('#easyLinksSocials_email').val());
-	socials['twitter'] = jQuery.trim($('#easyLinksSocials_twitter').val());
-	socials['facebook'] = jQuery.trim($('#easyLinksSocials_facebook').val());
-	socials['instagram'] = jQuery.trim($('#easyLinksSocials_instagram').val());
-	socials['youtube'] = jQuery.trim($('#easyLinksSocials_youtube').val());
-	socials['tiktok'] = jQuery.trim($('#easyLinksSocials_tiktok').val());
-
-	$('#modal_easyLinksSocials_loading').show();
-	$('#modal_easyLinksSocials_buttons').hide();
-
-        $.post("/api/easyLinksSocialsSave", {domain:domain, location:location, socials:socials},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-                        alert(data['message']);
-                }
-                else
-                {
-			$('#modal_easyLinksSocials').modal('hide');
-                }
-
-		$('#modal_easyLinksSocials_loading').hide();
-		$('#modal_easyLinksSocials_buttons').show();
-        }, "json");
-}
-</script>
-<div aria-labelledby="modal_easyLinksProtect_title" id="modal_easyLinksProtect" class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="modal_easyLinksProtect_title" class="modal-title">Link Protection</h4>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-	<div class="alert alert-info" style="display:none;">
-	</div>
-	<div>
-	  <input id="easyLinksProtect_domain" type="hidden" value="kelga.link">
-	  <input id="easyLinksProtect_id" type="hidden" value="">
-
-	  <div id="modal_easyLinksProtect_optionContainer_code" class="modal_easyLinksProtect_optionContainer well well-sm">
-	    <div><p style="position:absolute;">
-<label class="switchNew">
-  <span class="visually-hidden">enable passphrase protection</span>
-  <input id="modal_easyLinksProtect_optionSwitch_code" class="modal_easyLinksProtect_optionSwitch" value="code" type="checkbox" data-type="code" onclick="easyLinksProtectOptionSelect(this);">
-  <span class="slider"></span>
-</label>
-</p><p class="position:relative;"></p><center><strong>Passphrase</strong></center><p></p></div>
-	    <div id="modal_easyLinksProtect_optionSettingsContainer_code" class="modal_easyLinksProtect_optionSettingsContainer" style="display:none;">
-	      <br>
-	      <label for="modal_easyLinksProtect_code_value"><strong>Passphrase</strong></label>
-	      <p><small class="text-muted">This is the required passphrase to access the link or content.</small></p>
-	      <input id="modal_easyLinksProtect_code_value" type="text" class="form-control">
-	      <br>
-	      <label for="modal_easyLinksProtect_code_explanation"><strong>Explanation</strong></label>
-	      <p><small class="text-muted">Give an optional explanation.</small></p>
-	      <textarea id="modal_easyLinksProtect_code_explanation" class="form-control modal_easyLinksProtect_textarea"></textarea>
-	    </div>
-	  </div>
-
-	  <div id="modal_easyLinksProtect_optionContainer_birthday" class="modal_easyLinksProtect_optionContainer well well-sm">
-	    <div><p style="position:absolute;">
-<label class="switchNew">
-  <span class="visually-hidden">enable birthday protection</span>
-  <input id="modal_easyLinksProtect_optionSwitch_birthday" class="modal_easyLinksProtect_optionSwitch" value="birthday" type="checkbox" data-type="birthday" onclick="easyLinksProtectOptionSelect(this);">
-  <span class="slider"></span>
-</label>
-</p><p style="position:relative;"></p><center><strong>Birthday</strong></center><p></p></div>
-	    <div id="modal_easyLinksProtect_optionSettingsContainer_birthday" class="modal_easyLinksProtect_optionSettingsContainer" style="display:none;">
-	      <br>
-	      <label for="modal_easyLinksProtect_birthday_value"><strong>Minimum Age</strong></label>
-	      <p><small class="text-muted">The visitor will have to be at least this old to access the content.</small></p>
-	      <select id="modal_easyLinksProtect_birthday_value" class="form-control">
-		<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option><option value="60">60</option><option value="61">61</option><option value="62">62</option><option value="63">63</option><option value="64">64</option><option value="65">65</option><option value="66">66</option><option value="67">67</option><option value="68">68</option><option value="69">69</option><option value="70">70</option><option value="71">71</option><option value="72">72</option><option value="73">73</option><option value="74">74</option><option value="75">75</option><option value="76">76</option><option value="77">77</option><option value="78">78</option><option value="79">79</option><option value="80">80</option><option value="81">81</option><option value="82">82</option><option value="83">83</option><option value="84">84</option><option value="85">85</option><option value="86">86</option><option value="87">87</option><option value="88">88</option><option value="89">89</option><option value="90">90</option><option value="91">91</option><option value="92">92</option><option value="93">93</option><option value="94">94</option><option value="95">95</option><option value="96">96</option><option value="97">97</option><option value="98">98</option><option value="99">99</option>	      </select>
-	      <br>
-	      <label for="modal_easyLinksProtect_birthday_explanation"><strong>Explanation</strong></label>
-	      <p><small class="text-muted">Give an optional explanation.</small></p>
-	      <textarea id="modal_easyLinksProtect_birthday_explanation" class="form-control modal_easyLinksProtect_textarea"></textarea>
-	    </div>
-	  </div>
-
-	  <div id="modal_easyLinksProtect_optionContainer_sensitive" class="modal_easyLinksProtect_optionContainer well well-sm">
-	    <div><p style="position:absolute;">
-<label class="switchNew">
-  <span class="visually-hidden">enable sensitive content warning</span>
-  <input id="modal_easyLinksProtect_optionSwitch_sensitive" class="modal_easyLinksProtect_optionSwitch" value="sensitive" type="checkbox" data-type="sensitive" onclick="easyLinksProtectOptionSelect(this);">
-  <span class="slider"></span>
-</label>
-</p><p class="position:relative;"></p><center><strong>Sensitive Content</strong></center><p></p></div>
-	    <div id="modal_easyLinksProtect_optionSettingsContainer_sensitive" class="modal_easyLinksProtect_optionSettingsContainer" style="display:none;">
-		<br>
-		<p>The visitor will be required to acknowledge that the link may contain content that is not appropriate for all audiences.</p>
-	    </div>
-	  </div>
-
-	</div>
-      </div>
-      <div class="modal-footer">
-	<img alt="Loading..." id="modal_easyLinksProtect_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	<div id="modal_easyLinksProtect_buttons" class="modal-footer-buttons">
-	  <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancel</button>
-	  <button class="btn btn-primary btn-lg" onclick="easyLinksProtectSave();">Save</button>
-	</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function easyLinksProtectOptionSelect(e)
-{
-	var type = jQuery.trim($(e).attr('data-type'));
-	var checked = $(e).prop('checked');
-
-	$(".modal_easyLinksProtect_optionSwitch:not(#modal_easyLinksProtect_optionSwitch_"+type+")").prop('checked', false);
-
-	$('.modal_easyLinksProtect_optionSettingsContainer').hide();
-	if(checked)
-	{
-		$('#modal_easyLinksProtect_optionSettingsContainer_'+type).show();
-	}
-}
-
-function easyLinksProtectSave()
-{
-	var id = jQuery.trim($('#easyLinksProtect_id').val());
-	var domain = jQuery.trim($('#easyLinksProtect_domain').val());
-	var checked = $('.modal_easyLinksProtect_optionSwitch:checked:first').val();
-	var value = jQuery.trim($("#modal_easyLinksProtect_"+checked+"_value").val());
-	var explanation = jQuery.trim($("#modal_easyLinksProtect_"+checked+"_explanation").val());
-
-	$('#modal_easyLinksProtect_loading').show();
-	$('#modal_easyLinksProtect_buttons').hide();
-
-        $.post("/api/easyLinksProtectSave", {domain:domain, id:id, type:checked, value:value, explanation:explanation},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-			if(data['switchPlansPrompt'])
-			{
-				if(confirm(data['message']))
-				{
-					window.location = "/account/upgrade";
-				}
-			}
-			else
-			{
-                        	alert(data['message']);
-			}
-                }
-                else
-                {
-                        if(checked)
-                                $('#easyLinks_protect_'+id).addClass('text-porkbun');
-                        else
-                                $('#easyLinks_protect_'+id).removeClass('text-porkbun');
-
-			$('#modal_easyLinksProtect').modal('hide');
-                }
-
-		$('#modal_easyLinksProtect_loading').hide();
-		$('#modal_easyLinksProtect_buttons').show();
-        }, "json");
-}
-</script>
-<div aria-labelledby="modal_easyLinksAnalytics_title" id="modal_easyLinksAnalytics" class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="modal_easyLinksAnalytics_title" class="modal-title">Analytics Tracking IDs</h4>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-	<div class="alert alert-info" style="display:none;">
-	</div>
-	<div>
-	  <input id="easyLinksAnalytics_domain" type="hidden" value="kelga.link">
-	  <label for="easyLinksAnalytics_googleAnalyticsId" class="text-heavy">Google Analytics ID</label>
-	  <input class="form-control" type="text" id="easyLinksAnalytics_googleAnalyticsId"><br>
-	  <label for="easyLinksAnalytics_facebookPixelId" class="text-heavy">Facebook Pixel ID</label>
-	  <input class="form-control" type="text" id="easyLinksAnalytics_facebookPixelId"><br>
-	  <label for="easyLinksAnalytics_twitterPixelId" class="text-heavy">Twitter PixelID</label>
-	  <input class="form-control" type="text" id="easyLinksAnalytics_twitterPixelId"><br>
-	  <label for="easyLinksAnalytics_tikTokPixelId" class="text-heavy">TikTok Pixel ID</label>
-	  <input class="form-control" type="text" id="easyLinksAnalytics_tikTokPixelId">
-	  <hr>
-	  <div class="alert alert-info">
-	    <p><strong>UTM Parameters</strong></p>
-	    <p>We'll pass along the UTM parameters when one of your external links are clicked. The campaign parameter is automatically set to the title of the link.</p>
-	  </div>
-	  <label for="easyLinksAnalytics_utmMedium" class="text-heavy">UTM Medium</label>
-	  <input class="form-control" type="text" id="easyLinksAnalytics_utmMedium" placeholder="example: social"><br>
-	  <label for="easyLinksAnalytics_utmSource" class="text-heavy">UTM Source</label>
-	  <input class="form-control" type="text" id="easyLinksAnalytics_utmSource" placeholder="example: l.ink">
-	</div>
-      </div>
-      <div class="modal-footer">
-	<img alt="Loading..." id="modal_easyLinksAnalytics_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	<div id="modal_easyLinksAnalytics_buttons" class="modal-footer-buttons">
-	  <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancel</button>
-	  <button class="btn btn-primary btn-lg" onclick="easyLinksAnalyticsSave();">Save</button>
-	</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function easyLinksAnalyticsSave()
-{
-	var analytics = {};
-	var domain = jQuery.trim($('#easyLinksAnalytics_domain').val());
-
-	analytics['googleAnalyticsId'] = jQuery.trim($('#easyLinksAnalytics_googleAnalyticsId').val());
-	analytics['googleAdsId'] = jQuery.trim($('#easyLinksAnalytics_googleAdsId').val());
-	analytics['googleAdsConversionLabel'] = jQuery.trim($('#easyLinksAnalytics_googleAdsConversionLabel').val());
-	analytics['facebookPixelId'] = jQuery.trim($('#easyLinksAnalytics_facebookPixelId').val());
-	analytics['twitterPixelId'] = jQuery.trim($('#easyLinksAnalytics_twitterPixelId').val());
-	analytics['tikTokPixelId'] = jQuery.trim($('#easyLinksAnalytics_tikTokPixelId').val());
-
-	analytics['utmMedium'] = jQuery.trim($('#easyLinksAnalytics_utmMedium').val());
-	analytics['utmSource'] = jQuery.trim($('#easyLinksAnalytics_utmSource').val());
-
-	$('#modal_easyLinksAnalytics_loading').show();
-	$('#modal_easyLinksAnalytics_buttons').hide();
-
-        $.post("/api/easyLinksAnalyticsSave", {domain:domain, analytics:analytics},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-                        if(data['switchPlansPrompt'])
-                        {
-                                if(confirm(data['message']))
-                                {
-                                        window.location = "/account/upgrade";
-                                }
-                        }
-                        else
-                        {
-                                alert(data['message']);
-                        }
-                }
-                else
-                {
-			$('#modal_easyLinksAnalytics').modal('hide');
-                }
-
-		$('#modal_easyLinksAnalytics_loading').hide();
-		$('#modal_easyLinksAnalytics_buttons').show();
-        }, "json");
-}
-</script>
-<style>
-.modal_easyLinksAppearance_css_child
-{
-    font-family: Arial, Helvetica, sans-serif;
-    width: 100%;
-    max-width: 680px;
-    height: 67px;
-    margin: auto;
-    border: 1px solid black;
-    padding: 5px 0px 5px 0px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    line-height: 60px;
-    position: relative;
-    background-color: white;
-}
-
-.modal_easyLinksAppearance_css_linkImage
-{
-    width: 55px;
-    height: 55px;
-    margin-left: 5px;
-    position: absolute;
-}
-
-.modal_easyLinksAppearance_css_inner-child-href
-{
-    border: none;
-    text-decoration: none;
-    display: flex;
-    text-align: center;
-    padding: 16px 20px;
-}
-
-.modal_easyLinksAppearance_css_inner-child-href-text:hover
-{
-    text-decoration: underline;
-}
-.modal_easyLinksAppearance_css_inner-child-href-text
-{
-    text-decoration-color: black;
-    text-decoration: none;
-    color: black;
-    width: 100%;
-    margin: 0px;
-    padding: 0px;
-    line-height: 1.5;
-}
-</style>
-
-<div aria-labelledby="modal_easyLinksAppearance_title" id="modal_easyLinksAppearance" class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="modal_easyLinksAppearance_title" class="modal-title">Appearance</h4>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-	<div class="alert alert-info" style="display:none;">
-	</div>
-	<div>
-	  <input id="easyLinksAppearance_domain" type="hidden" value="kelga.link">
-
-<div class="modal_easyLinksAppearance_css_child">
-  <img alt="example link image" class="modal_easyLinksAppearance_css_linkImage" src="./kelga_privacy_policy_files/link-image-example">
-  <a class="modal_easyLinksAppearance_css_inner-child-href" href="https://easylinks-editor.porkbun.com/account" target="_NEW">
-    <p class="modal_easyLinksAppearance_css_inner-child-href-text">Link Example</p>
-  </a>
-</div>
-<br>
-<label for="modal_easyLinksAppearance_pageBackgroundColor"><strong>Page Background Color</strong></label>
-<input id="modal_easyLinksAppearance_pageBackgroundColor" type="color" value="#ffffff" style="width: 100%;" oninput="processAppearancePageBackgroundColorChange(this);">
-<br><br>
-<label for="modal_easyLinksAppearance_pageColor"><strong>Page Text Color</strong></label>
-<input id="modal_easyLinksAppearance_pageColor" type="color" value="#000000" style="width: 100%;" oninput="processAppearancePageColorChange(this);">
-<br><br>
-<label for="modal_easyLinksAppearance_radius"><strong>Link Box Corner Radius</strong></label>
-<input id="modal_easyLinksAppearance_radius" class="form-range" type="range" min="0" max="33" value="0" oninput="processAppearanceRadiusChange(this);">
-<br><br>
-<label for="modal_easyLinksAppearance_boxBackgroundColor"><strong>Link Box Background Color</strong></label>
-<input id="modal_easyLinksAppearance_boxBackgroundColor" type="color" value="#ffffff" style="width: 100%;" oninput="processAppearanceLinkBoxBackgroundColorChange(this);">
-<br><br>
-<label for="modal_easyLinksAppearance_borderColor"><strong>Link Box Border &amp; Text Color</strong></label>
-<input id="modal_easyLinksAppearance_borderColor" type="color" value="#000000" style="width: 100%;" oninput="processAppearanceBorderColorChange(this);">
-	</div>
-      </div>
-      <div class="modal-footer">
-	<img alt="Loading..." id="modal_easyLinksAppearance_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	<div id="modal_easyLinksAppearance_buttons" class="modal-footer-buttons">
-	  <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancel</button>
-	  <button class="btn btn-primary btn-lg" onclick="easyLinksAppearanceSave();">Save</button>
-	</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function easyLinksAppearanceSave()
-{
-	var appearance = {};
-	var domain = jQuery.trim($('#easyLinksAppearance_domain').val());
-
-	appearance['radius'] = jQuery.trim($('#modal_easyLinksAppearance_radius').val());
-	appearance['borderColor'] = jQuery.trim($('#modal_easyLinksAppearance_borderColor').val());
-	appearance['pageBackgroundColor'] = jQuery.trim($('#modal_easyLinksAppearance_pageBackgroundColor').val());
-	appearance['boxBackgroundColor'] = jQuery.trim($('#modal_easyLinksAppearance_boxBackgroundColor').val());
-	appearance['pageColor'] = jQuery.trim($('#modal_easyLinksAppearance_pageColor').val());
-
-	$('#modal_easyLinksAppearance_loading').show();
-	$('#modal_easyLinksAppearance_buttons').hide();
-
-        $.post("/api/easyLinksAppearanceSave", {domain:domain, appearance:appearance},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-                        alert(data['message']);
-                }
-                else
-                {
-			$('#modal_easyLinksAppearance').modal('hide');
-                }
-
-		$('#modal_easyLinksAppearance_loading').hide();
-		$('#modal_easyLinksAppearance_buttons').show();
-        }, "json");
-}
-
-function processAppearancePageColorChange(e)
-{
-	$("#modal_easyLinksAppearance").find(".modal-content").css('color', $(e).val());
-}
-
-function processAppearancePageBackgroundColorChange(e)
-{
-	$("#modal_easyLinksAppearance").find(".modal-content").css('background-color', $(e).val());
-}
-
-function processAppearanceLinkBoxBackgroundColorChange(e)
-{
-	$(".modal_easyLinksAppearance_css_child").css('background-color', $(e).val());
-}
-
-function processAppearanceBorderColorChange(e)
-{
-	$(".modal_easyLinksAppearance_css_inner-child-href-text").css('color', $(e).val());
-	$(".modal_easyLinksAppearance_css_child").css('border-color', $(e).val());
-}
-
-function processAppearanceRadiusChange(e)
-{
-	$(".modal_easyLinksAppearance_css_child").css('border-radius', $(e).val()+"px");
-	$(".modal_easyLinksAppearance_css_linkImage").css('border-radius', $(e).val()+"px");
-}
-</script>
-<div aria-labelledby="modal_easyLinksSettings_title" id="modal_easyLinksSettings" class="modal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="modal_easyLinksSettings_title" class="modal-title">Other Settings</h4>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-	<div class="alert alert-info" style="display:none;">
-	</div>
-	<div>
-
-          <input id="easyLinksSettings_domain" type="hidden" value="kelga.link">
-
-          <div id="modal_easyLinksSettings_optionContainer_sensitive" class="modal_easyLinksSettings_optionContainer alert alert-secondary">
-<div style="position:relative; height:100px;">
- <div class="float-start" style="position:relative; height:100%; margin-right:20px;">
-  <label class="switchNew">
-   <span class="visually-hidden">turn on sensitive content warning</span>
-   <input id="modal_easyLinksSettings_optionSwitch_sensitive" class="modal_easyLinksSettings_optionSwitch" value="sensitive" type="checkbox" data-type="sensitive" onclick="easyLinksSettingsOptionSelect(this);">
-   <span class="slider"></span>
-  </label>
- </div>
- <div>
-  <p><strong>Sensitive Content</strong></p>
-  <p>Visitors will be shown a sensitive content message before being allowed to view the site.</p>
- </div>
- <div style="clear:both;"></div>
-</div>
-            <div id="modal_easyLinksSettings_optionSettingsContainer_sensitive" class="modal_easyLinksSettings_optionSettingsContainer" style="display:none;">
-	      <fieldset>
-	       <legend><p><strong>Select an Option</strong></p></legend>
-               <input id="modal_easyLinksSettings_sensitive_value_generic" name="modal_easyLinksSettings_sensitive_value" type="radio" value="generic" checked="">
-               <label for="modal_easyLinksSettings_sensitive_value_generic">Generic Warning</label>
-               <br>
-               <input id="modal_easyLinksSettings_sensitive_value_18" name="modal_easyLinksSettings_sensitive_value" value="18" type="radio">
-               <label for="modal_easyLinksSettings_sensitive_value_18">18+</label>
-               <br>
-               <input id="modal_easyLinksSettings_sensitive_value_21" name="modal_easyLinksSettings_sensitive_value" value="21" type="radio">
-               <label for="modal_easyLinksSettings_sensitive_value_21">21+</label>
-               <br>
-               <input id="modal_easyLinksSettings_sensitive_value_25" name="modal_easyLinksSettings_sensitive_value" value="25" type="radio">
-               <label for="modal_easyLinksSettings_sensitive_value_25">25+</label>
-	      </fieldset>
-            </div>
-          </div>
-
-          <div id="modal_easyLinksSettings_optionContainer_signup" class="modal_easyLinksSettings_optionContainer alert alert-secondary">
-<div style="position:relative; height:100px;">
- <div class="float-start" style="position:relative; height:100%; margin-right:20px;">
-  <label class="switchNew">
-   <span class="visually-hidden">turn on mailing list integration</span>
-   <input id="modal_easyLinksSettings_optionSwitch_signup" class="modal_easyLinksSettings_optionSwitch" value="signup" type="checkbox" data-type="signup" onclick="easyLinksSettingsOptionSelect(this);">
-   <span class="slider"></span>
-  </label>
- </div>
- <div>
-  <p><strong>Mailing List Integration</strong></p>
-  <p>Allow visitors to easily add themselves to your mailing list.</p>
- </div>
- <div style="clear:both;"></div>
-</div>
-            <div id="modal_easyLinksSettings_optionSettingsContainer_signup" class="modal_easyLinksSettings_optionSettingsContainer" style="display:none;">
-
-	      <div>
-	          <div class="mb-3">
-		    <label for="modal_easyLinksSettings_optionSettingsContainerSelected_signup_buttonText" class="text-heavy">Link Text</label>
-		    <input id="modal_easyLinksSettings_optionSettingsContainerSelected_signup_buttonText" class="form-control" type="text" value="Sign Up">
-	          </div>
-	          <div class="mb-3">
-		    <label for="modal_easyLinksSettings_optionSettingsContainerSelected_signup_successMessage" class="text-heavy">Success Message</label>
-		    <input id="modal_easyLinksSettings_optionSettingsContainerSelected_signup_successMessage" class="form-control" type="text" value="You&#39;re signed up!">
-	          </div>
-	          <div class="mb-3">
-		    <label for="modal_easyLinksSettings_optionSettingsContainerSelected_signup_position" class="text-heavy">Link Position</label>
-		    <select id="modal_easyLinksSettings_optionSettingsContainerSelected_signup_position" class="form-select">
-		      <option value="top">Top</option>
-		      <option value="bottom">Bottom</option>
-		    </select>
-	          </div>
-	      </div>
-
-	      <br>
-	      <fieldset>
-	       <legend><p><strong>Select an Integration</strong></p></legend>
-               <input id="modal_easyLinksSettings_signup_value_mailchimp" name="modal_easyLinksSettings_signup_value" type="radio" value="mailchimp" checked="">
-               <label for="modal_easyLinksSettings_signup_value_mailchimp"><i class="fa-brands fa-mailchimp"></i> Mailchimp</label>
-	      </fieldset>
-
-	      <div id="modal_easyLinksSettings_optionSettingsContainerSelected_signup">
-	        <div id="modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp">
-	          <div class="mb-3">
-		    <label for="modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey" class="text-heavy">API Key</label>
-		    <input id="modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey" class="form-control" type="text" value="">
-		    <br>
-		    <div id="modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists_container" style="display:none;">
-		      <label for="modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists" class="text-heavy">Lists</label>
-		      <select id="modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists" class="form-select">
-		      </select>
-		    </div>
-		    <br>
-		    <img class="float-end" alt="Loading..." id="modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-		    <button id="modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey_button" class="btn btn-primary float-end" onclick="easyLinksSettingsSubmitMailchimpApiKey();">Submit API Key</button>
-		    <div style="clear:both;"></div>
-	          </div>
-	        </div>
-	      </div>
-
-            </div>
-          </div>
-
-	</div>
-      </div>
-      <div class="modal-footer">
-	<img alt="Loading..." id="modal_easyLinksSettings_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	<div id="modal_easyLinksSettings_buttons" class="modal-footer-buttons">
-	  <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">Cancel</button>
-	  <button class="btn btn-primary btn-lg" onclick="easyLinksSettingsSave();">Save</button>
-	</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function easyLinksSettingsSubmitMailchimpApiKey()
-{
-        var domain = jQuery.trim($('#easyLinksSettings_domain').val());
-	var mailChimpApiKey = jQuery.trim($('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey').val());
-
-	$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey_loading').show();
-	$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey_button').hide();
-	$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists').html('');
-	$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists_container').hide();
-
-        $.post("/api/easyLinksSettingsSubmitMailchimpApiKey", {domain:domain, mailChimpApiKey:mailChimpApiKey},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-                        alert(data['message']);
-                }
-                else
-                {
-			var listHtml = '<option value=""></option>';
-
-			for(var i = 0; i < data['lists']['lists'].length; i++)
-			{
-				var listItem = data['lists']['lists'][i];
-				listHtml += '<option value="'+listItem['id']+'">'+listItem['name']+'</option>';
-			}
-
-			$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists').html(listHtml);
-			$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists_container').show();
-                }
-
-		$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey_loading').hide();
-		$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey_button').show();
-        }, "json");
-}
-
-function easyLinksSettingsOptionSelect(e)
-{
-        var type = jQuery.trim($(e).attr('data-type'));
-        var checked = $(e).prop('checked');
-
-        $('.modal_easyLinksSettings_optionSettingsContainer').hide();
-        if(checked)
-        {
-                $('#modal_easyLinksSettings_optionSettingsContainer_'+type).show();
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Kelga</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-}
-
-function easyLinksSettingsSave()
-{
-        var domain = jQuery.trim($('#easyLinksSettings_domain').val());
-	var settings = {};
-
-        $('#modal_easyLinksSettings_loading').show();
-        $('#modal_easyLinksSettings_buttons').hide();
-
-	if($('#modal_easyLinksSettings_optionSwitch_sensitive').prop('checked'))
-	{
-		settings['sensitive'] = {};
-		var value = $('input[name="modal_easyLinksSettings_sensitive_value"]:checked').val();
-		settings['sensitive']['value'] = value;
-	}
-	else
-	{
-		settings['sensitive'] = null;
-	}
-
-	if($('#modal_easyLinksSettings_optionSwitch_signup').prop('checked'))
-	{
-		var buttonText = jQuery.trim($('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_buttonText').val());
-		var successMessage = jQuery.trim($('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_successMessage').val());
-		var position = jQuery.trim($('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_position').val());
-
-		var signupIntegration = 'mailchimp';
-		var mailChimpApiKey = jQuery.trim($('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey').val());
-		var mailChimpApiList = jQuery.trim($('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists').val());
-
-		settings['signup'] = {};
-		settings['signup']['buttonText'] = buttonText;
-		settings['signup']['successMessage'] = successMessage;
-		settings['signup']['position'] = position;
-		settings['signup']['signupIntegration'] = signupIntegration;
-		settings['signup']['mailChimpApiKey'] = mailChimpApiKey;
-		settings['signup']['mailChimpApiList'] = mailChimpApiList;
-	}
-	else
-	{
-		settings['signup'] = null;
-	}
-
-        $.post("/api/easyLinksSettingsSave", {domain:domain, settings:settings},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-                        if(data['switchPlansPrompt'])
-                        {
-                                if(confirm(data['message']))
-                                {
-                                        window.location = "/account/upgrade";
-                                }
-                        }
-                        else
-                        {
-                                alert(data['message']);
-                        }
-                }
-                else
-                {
-			$('#modal_easyLinksSettings').modal('hide');
-                }
-
-                $('#modal_easyLinksSettings_loading').hide();
-                $('#modal_easyLinksSettings_buttons').show();
-        }, "json");
-}
-</script>
-
-
-<br>
-<div class="page-master-container">
-<!-- h1>Editor</h1 -->
-
-<div class="demo"></div>
-
-<div class="container">
-  <div class="" style="border:0px solid gray;">
-    <!-- div class="row">
-      <div class="col-sm-12">
-        <strong>Lifetime Analytics:</strong> <span id="analyticsSnapshot"><img alt="Loading lifetime analytics..." src="/images/loading.small.gif"></span>
-      </div>
-    </div -->
-    <br><br>
-    <div class="row">
-      <div class="col-sm-3">
-	<div class="d-grid gap-2">
-	  <button class="btn btn-lg btn-secondary " data-domain="kelga.link" onclick="handleEasyLinksSocialsModal(this);">Edit Social links</button>
-	</div>
-      </div>
-      <div class="col-sm-3">
-	<div class="d-grid gap-2">
-	  <button class="btn btn-lg btn-secondary " data-domain="kelga.link" onclick="handleEasyLinksAppearanceModal(this);">Edit Appearance</button>
-	</div>
-      </div>
-      <div class="col-sm-3">
-	<div class="d-grid gap-2">
-	  <button class="btn btn-lg btn-secondary " data-domain="kelga.link" onclick="handleEasyLinksAnalyticsModal(this);">Analytics Tracking</button>
-	</div>
-      </div>
-      <div class="col-sm-3">
-	<div class="d-grid gap-2">
-	  <img alt="Loading..." id="easyLinks_settings_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;">
-	  <button aria-label="other settings" id="easyLinks_settings_button" class="btn btn-lg btn-secondary " data-domain="kelga.link" onclick="handleEasyLinksSettingsModal(this);"><i class="fa-solid fa-gear"></i></button>
-	</div>
-      </div>
-    </div>
-    <br>
-    <div class="card">
-     <h2 class="card-header">Profile</h2>
-     <div class="card-body">
-     <div class="row">
-      <div class="col-md-12">
-        <div class="float-end" style="display:inline-block">
-	  <center>
-	  <a href="http://kelga.link/" target="_NEW">kelga.link <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-	  </center>
-	</div>
-	<img alt="page avatar" id="easyLinks_avatar" class="easyLinks_avatar float-start" src="./kelga_privacy_policy_files/avatar-kelga.link-H4Yu4Z.jpeg">
-	<div class="float-start" style="margin-left:30px; margin-top:30px;">
-	  <button class="btn btn-lg btn-primary" data-target="easyLinks_imageUploadForm" data-setting="image-profile" onclick="handleEasyLinksImageUpload(this);">Upload an Image</button>
-	  <button class="btn btn-lg btn-secondary" data-target="easyLinks_imageUploadForm" data-setting="image-profile" onclick="handleEasyLinksImageDelete(this);" data-domain="kelga.link">Remove Image</button>
-	</div>
-	<div style="clear:both;"></div>
-	<label for="easyLinks_title" class="text-muted" style="margin-top:10px;">Title</label>
-	<input id="easyLinks_title" class="form-control" type="text" value="Kelga Privacy Policy" oninput="handleEasyLinksProfileChange();">
-	<label for="easyLinks_bio" class="text-muted" style="margin-top:10px;">Bio</label>
-	<textarea id="easyLinks_bio" class="form-control" style="resize: vertical; height: 381px;" oninput="handleEasyLinksProfileChange();">Introduction
-Welcome to Kelga. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when you use our poultry farm management application.
-
-Information We Collect
-We collect information that you provide directly to us, including:
-
-Account information (username, password, email address)
-Farm business data (inventory, sales records, expenses)
-Employee information (names, roles, salary data)
-Financial transactions and accounting records
-Device information for app optimization
-How We Use Your Information
-Your information is used exclusively to:
-
-Provide and maintain our farm management services
-Process your business transactions and generate reports
-Improve app functionality and user experience
-Ensure data security and prevent unauthorized access
-Provide customer support when requested
-Data Security
-We implement industry-standard security measures to protect your data, including:
-
-Encrypt</textarea>
-	<br>
-	<img alt="Loading..." id="easyLinks_loading" src="./kelga_privacy_policy_files/loading.small.gif" style="display:none;" class="float-end">
-	<div id="easyLinks_profileButtonsContainer" class="float-end" style="display:none;">
-          <button class="btn btn-lg btn-secondary" data-dismiss="modal" onclick="window.location.reload();">Cancel</button>
-          <button class="btn btn-lg btn-primary" onclick="saveEasyLinksProfile(this);" data-domain="kelga.link">Save Profile</button>
-	</div>
-	<div style="clear:both;"></div>
-      </div>
-     </div>
-     </div>
-    </div>
-    <br>
-    <div class="card">
-    <h2 class="card-header">Links</h2>
-    <div class="card-body">
-    <div class="row">
-      <div class="col-md-12">
-	<div class="d-grid gap-2">
-	  <button class="btn btn-lg btn-primary" onclick="easyLinksAddLink();">Add a Link</button>
-	</div>
-      </div>
-    </div>
-
-    <br>
-    <div class="row">
-      <div id="easyLinks_linkContainer_295095" class="col-xs-12">
-	<div class="alert alert-medium">
-	 <div class="row">
-          <div class="col-xs-2 col-sm-1" style="height:145px;">
-  	    <div style="height:100%; border-right:0px solid gray; font-size:x-large; position: relative;">
-	        <center style="display:none;">
-		  <div>
-		    <button aria-label="move link up" data-domain="kelga.link" data-id="295095" onclick="updateEasyLinksLinkSortId(this, &#39;UP&#39;);" class="btn btn-secondary btn-lg linkButton linkButtonIcon"><i class="fa-xl far fa-arrow-alt-circle-up pointer text-muted" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Move this link up." data-bs-original-title="" title=""></i></button>
-		  </div>
-		</center>
-		<center style="width:100%; bottom: 39px; position:absolute;">
-		  <div class="easyLinks_linkImageContainer pointer" data-id="295095" data-target="easyLinks_imageUploadForm" data-setting="image-link" tabindex="-1" onkeypress="processKeyPress(event, handleEasyLinksImageDelete(this));" onclick="handleEasyLinksImageDelete(this);" data-domain="kelga.link">
-		    <img alt="delete link image" id="easyLinks_linkImage_295095" src="https://easylinks-editor.porkbun.com/account" class="easyLinks_linkImage pointer" style="display:none;"><div class="after"><i title="delete link" class="fas fa-trash-alt"></i></div>
-		  </div>
-	        </center>
-	        <center style="display:none; width:100%; bottom: 0; position:absolute;">
-		  <div>
-		    <button aria-label="move link down" data-domain="kelga.link" data-id="295095" onclick="updateEasyLinksLinkSortId(this, &#39;DOWN&#39;);" class="btn btn-secondary btn-lg linkButton linkButtonIcon"><i class="fa-xl far fa-arrow-alt-circle-down pointer text-muted" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Move this link down." data-bs-original-title="" title=""></i></button>
-	    	  </div>
-		</center>
-	    </div>
-          </div>
-          <div class="col-xs-10 col-sm-11" style="heightt:145px;">
-	    <p class="float-start text-break"><strong id="easyLinks_linkTitle_295095" class="" style="font-size:larger;">Get your own domain name and website!</strong></p>
-	    <p class="float-end"><label class="switchNew"><span class="visually-hidden">toggle link visibility</span><input onclick="handleEasyLinksLinkStatusClick(this);" id="easyLinksAddLink_status" value="off" type="checkbox" data-domain="kelga.link" data-id="295095"><span class="slider"></span></label></p>
-	    <div style="clear:both;"></div>
-	    <p class="text-break" id="easyLinks_linkUrl_295095">https://porkbun.com</p>
-	    <br>
-	    <div style="font-size:larger;">
-<button aria-label="edit link" class="text-muted float-start btn btn-secondary btn-lg linkButton linkButtonIcon" data-domain="kelga.link" data-id="295095" onclick="handleEasyLinksEdit(this);" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Edit the link URL and title." data-bs-original-title="" title="">
-	      <i class="far fa-edit fa-lg"></i>
-</button>
-<button aria-label="upload link image" class="text-muted float-start btn btn-secondary btn-lg linkButton linkButtonIcon" data-target="easyLinks_imageUploadForm" data-setting="image-link" data-domain="kelga.link" data-id="295095" onclick="handleEasyLinksImageUpload(this);" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Upload a link image." data-bs-original-title="" title="">
-	      <i class="far fa-image fa-lg"></i>
-</button>
-<button aria-label="edit link animation" class="text-muted float-start btn btn-secondary btn-lg linkButton linkButtonIcon" data-domain="kelga.link" data-id="295095" onclick="handleEasyLinksAnimation(this);" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Edit link animation." data-bs-original-title="" title="">
-	      <i class="far fa-star fa-lg " id="easyLinks_linkAnimation_295095"></i>
-</button>
-<button aria-label="edit link schedule" class="text-muted float-start btn btn-secondary btn-lg linkButton linkButtonIcon" data-domain="kelga.link" data-id="295095" onclick="handleEasyLinksSchedule(this);" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Edit link schedule." data-bs-original-title="" title="">
-	      <i class="far fa-calendar-alt fa-lg " id="easyLinks_linkSchedule_295095"></i>
-</button>
-<button aria-label="edit link protection" class="text-muted float-start btn btn-secondary btn-lg linkButton linkButtonIcon" data-domain="kelga.link" data-id="295095" onclick="handleEasyLinksProtect(this);" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Edit link protection." data-bs-original-title="" title="">
-	      <i class="fas fa-user-lock fa-lg " id="easyLinks_protect_295095"></i>
-</button>
-<!-- button aria-label="view link statistics" class="text-muted float-start btn btn-secondary btn-lg linkButton linkButtonIcon" data-domain="kelga.link" data-id="295095" onclick="handleEasyLinksStatistics(this);" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="View link statistics.">
-	      <i class="fas fa-chart-line fa-lg"></i>
-</button -->
-<button aria-label="delete link" class="text-muted float-end btn btn-secondary btn-lg linkButton linkButtonIcon" data-domain="kelga.link" data-id="295095" onclick="deleteEasyLinksLink(this);" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Delete this link." data-bs-original-title="" title="">
-	      <i class="fas fa-trash-alt fa-lg"></i>
-</button>
-	    </div>
-	    <div style="clear:both;"></div>
-          </div>
-	 </div>
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .app-name {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+        
+        h2:first-child {
+            margin-top: 0;
+        }
+        
+        p, li {
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        ul li:before {
+            content: "•";
+            color: #667eea;
+            font-weight: bold;
+            display: inline-block;
+            width: 1.5em;
+            margin-left: -1.5em;
+        }
+        
+        .contact-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #555;
+        }
+        
+        .contact-label {
+            font-weight: 600;
+            color: #667eea;
+            min-width: 80px;
+        }
+        
+        .contact-value {
+            color: #333;
+        }
+        
+        a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        .effective-date {
+            text-align: center;
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .app-name {
+                font-size: 2em;
+            }
+            
+            .contact-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="app-name">Kelga</div>
+            <div class="subtitle">Privacy Policy</div>
         </div>
-      </div>
-    </div>
-    </div> <!-- card body -->
-
-  </div>
-</div>
-</div> <!-- page-master-container -->
-
-<br>
-
-</div>
- <form data-domain="kelga.link" data-target="easyLinks_imageUploadForm" method="post" enctype="multipart/form-data">
-  <input type="hidden" name="MAX_FILE_SIZE" value="5000000">
-  <input aria-label="file upload" type="file" name="file" style="display:none" accept="image/jpeg,image/png" onchange="processEasyLinksImageUpload(this);">
- <input class="formCsrf" type="hidden" name="csrf_token_1" value="828d51a0f77d65a3b98d2b0e580208e5"></form>
-</div>
-
-<script>
-
-var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-  return new bootstrap.Popover(popoverTriggerEl)
-})
-
-function onReady()
-{
-                $.post("/api/getAnalyticsSnapshot", {empty:true},
-                function(data)
-                {
-                        if(data['error'] == '1')
-                        {
-                        }
-                        else
-                        {
-                                $('#analyticsSnapshot').html("<span class='analyticsItemBox'>Users: "+data['data']['userCount']+"</span><span class='analyticsItemBox'>Views: "+data['data']['pageView']+"</span><span class='analyticsItemBox'>Clicks: "+data['data']['linkClick']+"</span><span class='analyticsItemBox'>CTR: "+data['data']['ctr']+"</span><small class='analyticsItemBox'><a href='/account/analytics'>more analytics</a></small>");
-                        }
-                }, "json");
-}
-
-function handleEasyLinksAppearanceModal(e)
-{
-        var domain = jQuery.trim($(e).attr('data-domain'));
-
-       	$.post("/api/getEasyLinksAppearance", {domain:domain},
-        function(data)
-       	{
-                if(data['error'] == '1')
-               	{
-       	                alert(data['message']);
-               	}
-       	        else
-                {
-			if(data['settings']['appearance-pageColor'])
-			{
-				$("#modal_easyLinksAppearance").find(".modal-content").css('color', data['settings']['pageColor']);
-				$("#modal_easyLinksAppearance_pageColor").val(data['settings']['appearance-pageColor']);
-			}
-			if(data['settings']['appearance-borderColor'])
-			{
-				$(".modal_easyLinksAppearance_css_inner-child-href-text").css('color', data['settings']['appearance-borderColor']);
-				$(".modal_easyLinksAppearance_css_child").css('border-color', data['settings']['appearance-borderColor']);
-				$("#modal_easyLinksAppearance_borderColor").val(data['settings']['appearance-borderColor']);
-			}
-			if(data['settings']['appearance-boxBackgroundColor'])
-			{
-				$(".modal_easyLinksAppearance_css_child").css('background-color', data['settings']['appearance-boxBackgroundColor']);
-				$("#modal_easyLinksAppearance_boxBackgroundColor").val(data['settings']['appearance-boxBackgroundColor']);
-			}
-			if(data['settings']['appearance-pageBackgroundColor'])
-			{
-				$("#modal_easyLinksAppearance").find(".modal-content").css('background-color', data['settings']['appearance-pageBackgroundColor']);
-				$("#modal_easyLinksAppearance_pageBackgroundColor").val(data['settings']['appearance-pageBackgroundColor']);
-			}
-			if(data['settings']['appearance-radius'])
-			{
-				$(".modal_easyLinksAppearance_css_child").css('border-radius', data['settings']['appearance-radius']+"px");
-				$(".modal_easyLinksAppearance_css_linkImage").css('border-radius', data['settings']['appearance-radius']+"px");
-				$("#modal_easyLinksAppearance_radius").val(data['settings']['appearance-radius'])
-			}
-
-			$('#modal_easyLinksAppearance').modal('show');
-       	        }
-        }, "json");
-}
-
-function handleEasyLinksAnalyticsModal(e)
-{
-        var domain = jQuery.trim($(e).attr('data-domain'));
-
-       	$.post("/api/getEasyLinksAnalytics", {domain:domain},
-        function(data)
-       	{
-                if(data['error'] == '1')
-               	{
-       	                alert(data['message']);
-               	}
-       	        else
-                {
-			if(data['settings'])
-			{
-				$('#easyLinksAnalytics_googleAnalyticsId').val(data['settings']['analytics-id-googleAnalyticsId']);
-				$('#easyLinksAnalytics_googleAdsId').val(data['settings']['analytics-id-googleAdsId']);
-				$('#easyLinksAnalytics_googleAdsConversionLabel').val(data['settings']['analytics-id-googleAdsConversionLabel']);
-				$('#easyLinksAnalytics_facebookPixelId').val(data['settings']['analytics-id-facebookPixelId']);
-				$('#easyLinksAnalytics_twitterPixelId').val(data['settings']['analytics-id-twitterPixelId']);
-				$('#easyLinksAnalytics_tikTokPixelId').val(data['settings']['analytics-id-tikTokPixelId']);
-
-				$('#easyLinksAnalytics_utmMedium').val(data['settings']['analytics-id-utmMedium']);
-				$('#easyLinksAnalytics_utmSource').val(data['settings']['analytics-id-utmSource']);
-			}
-
-			$('#modal_easyLinksAnalytics').modal('show');
-       	        }
-        }, "json");
-}
-
-function handleEasyLinksSettingsModal(e)
-{
-        var domain = jQuery.trim($(e).attr('data-domain'));
-
-	$('#easyLinks_settings_loading').show();
-	$('#easyLinks_settings_button').hide();
-
-       	$.post("/api/getEasyLinksSettings", {domain:domain},
-        function(data)
-       	{
-                if(data['error'] == '1')
-               	{
-       	                alert(data['message']);
-               	}
-       	        else
-                {
-			$('.modal_easyLinksSettings_optionSwitch').prop('checked', false);
-			$('.modal_easyLinksSettings_optionSettingsContainer').hide();
-			$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists_container').hide();
-
-			if(data['settings'])
-			{
-				if(data['settings']['settings-signup'])
-				{
-					$('#modal_easyLinksSettings_optionSwitch_signup').prop('checked', true);
-					$('#modal_easyLinksSettings_optionSettingsContainer_signup').show();
-
-					if(data['settings']['settings-signup']['buttonText'])
-						$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_buttonText').val((data['settings']['settings-signup']['buttonText']));
-					if(data['settings']['settings-signup']['successMessage'])
-						$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_successMessage').val((data['settings']['settings-signup']['successMessage']));
-					if(data['settings']['settings-signup']['mailChimpApiKey'])
-						$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_apiKey').val((data['settings']['settings-signup']['mailChimpApiKey']));
-
-					$("#modal_easyLinksSettings_optionSettingsContainerSelected_signup_position").find("[value='"+data['settings']['settings-signup']['position']+"']").prop('selected', true);
-
-					if(data['settings']['settings-signup']['lists'])
-					{
-                        			var listHtml = '<option value=""></option>';
-
-			                        for(var i = 0; i < data['settings']['settings-signup']['lists']['lists'].length; i++)
-                        			{
-			                                var listItem = data['settings']['settings-signup']['lists']['lists'][i];
-                        			        listHtml += '<option value="'+listItem['id']+'" '+(listItem['id'] == data['settings']['settings-signup']['mailChimpApiList'] ? 'SELECTED' : '')+'>'+listItem['name']+'</option>';
-			                        }
-
-			                        $('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists').html(listHtml);
-			                        $('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists_container').show();
-					}
-				}
-				else
-				{
-					$('#modal_easyLinksSettings_optionSwitch_signup').prop('checked', false);
-					$('#modal_easyLinksSettings_optionSettingsContainerSelected_signup_mailchimp_lists_container').hide();
-				}
-
-				if(data['settings']['settings-sensitive'])
-				{
-					$('#modal_easyLinksSettings_optionSwitch_sensitive').prop('checked', true);
-					$('#modal_easyLinksSettings_sensitive_value_'+data['settings']['settings-sensitive']).prop('checked', true);
-					$('#modal_easyLinksSettings_optionSettingsContainer_sensitive').show();
-				}
-				else
-				{
-					$('#modal_easyLinksSettings_optionSwitch_sensitive').prop('checked', false);
-					$('#modal_easyLinksSettings_sensitive_value_generic').prop('checked', true);
-				}
-			}
-
-			$('#modal_easyLinksSettings').modal('show');
-       	        }
-
-		$('#easyLinks_settings_loading').hide();
-		$('#easyLinks_settings_button').show();
-        }, "json");
-}
-
-function handleEasyLinksProtect(e)
-{
-        var domain = jQuery.trim($(e).attr('data-domain'));
-        var id = jQuery.trim($(e).attr('data-id'));
-
-	$('#easyLinksProtect_id').val(id);
-
-       	$.post("/api/getEasyLinksProtect", {domain:domain, id:id},
-        function(data)
-       	{
-                if(data['error'] == '1')
-               	{
-       	                alert(data['message']);
-               	}
-       	        else
-                {
-			$('.modal_easyLinksProtect_optionSwitch').prop('checked', false);
-			$('.modal_easyLinksProtect_optionSettingsContainer').hide();
-
-			$('#modal_easyLinksProtect_code_value').val('');
-			$('#modal_easyLinksProtect_code_explanation').val('');
-
-			$('#modal_easyLinksProtect_birthday_value').val('');
-			$('#modal_easyLinksProtect_birthday_explanation').val('');
-
-			if(data['setting'])
-			{
-				$('#modal_easyLinksProtect_optionSwitch_'+data['setting']['value']).prop('checked', true);
-				$('#modal_easyLinksProtect_optionSettingsContainer_'+data['setting']['value']).show();
-
-				if(data['setting']['value'] == 'code')
-				{
-					$('#modal_easyLinksProtect_code_value').val(data['setting']['extended']['value']);
-					$('#modal_easyLinksProtect_code_explanation').val(data['setting']['extended']['explanation']);
-				}
-
-				if(data['setting']['value'] == 'birthday')
-				{
-					$('#modal_easyLinksProtect_birthday_value').val(data['setting']['extended']['value']);
-					$('#modal_easyLinksProtect_birthday_explanation').val(data['setting']['extended']['explanation']);
-				}
-			}
-
-			$('#modal_easyLinksProtect').modal('show');
-       	        }
-        }, "json");
-}
-
-function handleEasyLinksSocialsModal(e)
-{
-        var domain = jQuery.trim($(e).attr('data-domain'));
-
-       	$.post("/api/getEasyLinksSocials", {domain:domain},
-        function(data)
-       	{
-                if(data['error'] == '1')
-               	{
-       	                alert(data['message']);
-               	}
-       	        else
-                {
-			if(data['settings']['social-location'])
-				$('#easyLinksSocials_location').val(data['settings']['social-location']);
-			$('#easyLinksSocials_email').val(data['settings']['social-link-email']);
-			$('#easyLinksSocials_twitter').val(data['settings']['social-link-twitter']);
-			$('#easyLinksSocials_facebook').val(data['settings']['social-link-facebook']);
-			$('#easyLinksSocials_instagram').val(data['settings']['social-link-instagram']);
-			$('#easyLinksSocials_youtube').val(data['settings']['social-link-youtube']);
-			$('#easyLinksSocials_tiktok').val(data['settings']['social-link-tiktok']);
-
-			$('#modal_easyLinksSocials').modal('show');
-       	        }
-        }, "json");
-}
-
-function handleEasyLinksSchedule(e)
-{
-        var id = jQuery.trim($(e).attr('data-id'));
-        var domain = jQuery.trim($(e).attr('data-domain'));
-	var offset = new Date().getTimezoneOffset();
-
-	$('#easyLinksSchedule_id').val(id);
-
-       	$.post("/api/getEasyLinksLink", {domain:domain, id:id, formatDate:true, offset:offset},
-        function(data)
-       	{
-                if(data['error'] == '1')
-               	{
-       	                alert(data['message']);
-               	}
-       	        else
-                {
-
-			if(data['link'] && data['link']['start_date'])
-			{
-				$('#easyLinksSchedule_startDate').val(data['link']['start_date']);
-			}
-			if(data['link'] && data['link']['end_date'])
-			{
-				$('#easyLinksSchedule_endDate').val(data['link']['end_date']);
-			}
-
-			$('#modal_easyLinksSchedule').modal('show');
-       	        }
-        }, "json");
-}
-
-function handleEasyLinksImageDelete(e)
-{
-        var domain = jQuery.trim($(e).attr('data-domain'));
-        var target = $(e).attr('data-target');
-        var setting = $(e).attr('data-setting');
-        var id = $(e).attr('data-id');
-
-	if(confirm("Are you sure you want to remove this image?"))
-	{
-	        $.post("/api/easyLinksImageCropSave", {domain:domain, setting:setting, id:id},
-        	function(data)
-	        {
-                	if(data['error'] == '1')
-        	        {
-	                        alert(data['message']);
-                	}
-        	        else
-	                {
-				if(setting == "image-profile")
-					$('#easyLinks_avatar').attr('src', 'https://porkbun-media.s3.us-west-2.amazonaws.com/easy-links/avatars/easy-links-avatar.png');
-				else if(setting == "image-link")
-				{
-					$('#easyLinks_linkImage_'+id).attr('src', '');
-					$('#easyLinks_linkImage_'+id).hide();
-				}
-        	        }
-	        }, "json");
-	}
-}
-
-function handleEasyLinksAnimation(e)
-{
-        var id = jQuery.trim($(e).attr('data-id'));
-        var domain = jQuery.trim($(e).attr('data-domain'));
-
-	$('#easyLinksAnimation_id').val(id);
-
-       	$.post("/api/getEasyLinksSetting", {domain:domain, name:"animation-link-"+id},
-        function(data)
-       	{
-                if(data['error'] == '1')
-               	{
-       	                alert(data['message']);
-               	}
-       	        else
-                {
-			$("#easyLinksAnimation_demo").removeClass (function (index, className) {return (className.match (/(^|\s)animation\S+/g) || []).join(' ');});
-
-			if(data['setting'] && data['setting']['value'])
-			{
-				$('#easyLinksAnimation_demoText').html(linkAnimationTypes[data['setting']['value']]);
-				$('#easyLinksAnimation_animationType').val(data['setting']['value']).change();
-			}
-			else
-			{
-				$('#easyLinksAnimation_demoText').html('no animation');
-				$('#easyLinksAnimation_animationType').val("").change();
-			}
-
-			$('#modal_easyLinksAnimation').modal('show');
-       	        }
-        }, "json");
-}
-
-function handleEasyLinksEdit(e)
-{
-        var id = jQuery.trim($(e).attr('data-id'));
-        var domain = jQuery.trim($(e).attr('data-domain'));
-	var title = jQuery.trim($('#easyLinks_linkTitle_'+id).html());
-	var url = jQuery.trim($('#easyLinks_linkUrl_'+id).html());
-
-	$('#easyLinksEditLink_title').val(title);
-	$('#easyLinksEditLink_url').val(url);
-	$('#easyLinksEditLink_id').val(id);
-
-	$('#modal_easyLinksEditLink').modal('show');
-}
-
-function updateEasyLinksLinkSortId(e, direction)
-{
-        var id = jQuery.trim($(e).attr('data-id'));
-        var domain = jQuery.trim($(e).attr('data-domain'));
-
-       	$.post("/api/updateEasyLinksLinkSortId", {domain:domain, id:id, direction:direction},
-        function(data)
-       	{
-                if(data['error'] == '1')
-               	{
-       	                alert(data['message']);
-               	}
-       	        else
-                {
-			window.location.reload();
-       	        }
-        }, "json");
-}
-
-function handleEasyLinksLinkStatusClick(e)
-{
-        var id = jQuery.trim($(e).attr('data-id'));
-        var domain = jQuery.trim($(e).attr('data-domain'));
-	var status = jQuery.trim($(e).val()).toLowerCase();
-	var newStatus = status == "on" ? "off" : "on";
-
-	if(confirm("Are you sure you want to turn this link "+newStatus+"?"))
-	{
-        	$.post("/api/toggleEasyLinksLinkStatus", {domain:domain, id:id},
-	        function(data)
-        	{
-	                if(data['error'] == '1')
-                	{
-        	                alert(data['message']);
-                	}
-        	        else
-	                {
-        	        }
-	        }, "json");
-	}
-	else
-	{
-		$(e).prop('checked', !$(e).prop('checked'));
-	}
-}
-
-function deleteEasyLinksLink(e)
-{
-        var id = jQuery.trim($(e).attr('data-id'));
-        var domain = jQuery.trim($(e).attr('data-domain'));
-
-	if(confirm("Are you sure you want to delete this link?"))
-	{
-        	$.post("/api/deleteEasyLinksLink", {domain:domain, id:id},
-	        function(data)
-        	{
-	                if(data['error'] == '1')
-                	{
-        	                alert(data['message']);
-                	}
-        	        else
-	                {
-				$("#easyLinks_linkContainer_"+id).remove();
-        	        }
-	        }, "json");
-	}
-}
-
-function saveEasyLinksProfile(e)
-{
-        var domain = jQuery.trim($(e).attr('data-domain'));
-	var title = jQuery.trim($('#easyLinks_title').val());
-	var bio = jQuery.trim($('#easyLinks_bio').val());
-
-	$("#easyLinks_loading").show();
-	$('#easyLinks_profileButtonsContainer').hide();
-
-        $.post("/api/saveEasyLinksProfile", {domain:domain, title:title, bio:bio},
-        function(data)
-        {
-                if(data['error'] == '1')
-                {
-                        alert(data['message']);
-			$("#easyLinks_loading").hide();
-			$('#easyLinks_profileButtonsContainer').show();
-                }
-                else
-                {
-        	        $("#easyLinks_loading").hide();
-			$('#easyLinks_profileButtonsContainer').hide();
-                }
-        }, "json");
-}
-
-function handleEasyLinksProfileChange()
-{
-	$('#easyLinks_profileButtonsContainer').show();
-}
-
-function processEasyLinksImageUpload(e)
-{
-        var formData = new FormData($(e).parent().get(0));
-        var setting = jQuery.trim($(e).parent().attr('data-setting'));
-        var domain = jQuery.trim($(e).parent().attr('data-domain'));
-        var id = jQuery.trim($(e).parent().attr('data-id'));
-
-        formData.append("setting", setting);
-        formData.append("domain", domain);
-        formData.append("id", id);
-
-        $.ajax(
-        {
-                url: "/api/uploadEasyLinksImage",
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                beforeSend:function(jqXHR, Obj)
-                {
-                },
-                success: function(data)
-                {
-                        $(e).val('');
-                        var response = jQuery.parseJSON(data);
-
-                        if(response['error'] == 1)
-                        {
-                                alert(response['message']);
-                        }
-                        else
-                        {
-                                if(response['setting'] == 'image-profile')
-				{
-					$('#modal_easyLinksImageCrop').on('shown.bs.modal', function(){ 
-						$('#modal_easyLinksImageCrop_container').croppie('destroy');
-						$('#modal_easyLinksImageCrop_container').croppie({url: response['url'], viewport: { width: 100, height: 100, type: 'circle'}, boundary: { width: 300, height: 300 }});
-					});
-					$('#modal_easyLinksImageCrop_form').find('input[name="setting"]').val(setting);
-					$('#modal_easyLinksImageCrop_form').find('input[name="id"]').val(id);
-					$('#modal_easyLinksImageCrop_form').find('input[name="height"]').val(response['height']);
-					$('#modal_easyLinksImageCrop_form').find('input[name="width"]').val(response['width']);
-					$('#modal_easyLinksImageCrop').modal('show');
-                                }
-                                else if(response['setting'] == 'image-link' && id)
-				{
-					$('#modal_easyLinksImageCrop').on('shown.bs.modal', function(){ 
-						$('#modal_easyLinksImageCrop_container').croppie('destroy');
-						$('#modal_easyLinksImageCrop_container').croppie({url: response['url'], viewport: { width: 100, height: 100, type: 'square'}, boundary: { width: 300, height: 300 }});
-					});
-					$('#modal_easyLinksImageCrop_form').find('input[name="setting"]').val(setting);
-					$('#modal_easyLinksImageCrop_form').find('input[name="id"]').val(id);
-					$('#modal_easyLinksImageCrop_form').find('input[name="height"]').val(response['height']);
-					$('#modal_easyLinksImageCrop_form').find('input[name="width"]').val(response['width']);
-					$('#modal_easyLinksImageCrop').modal('show');
-                                }
-                                else
-                                {
-                                        alert("Obscure error message: Unrecognized setting name.");
-                                }
-                        }
-
-			formData = new FormData();
-                }
-        });
-}
-
-function handleEasyLinksImageUpload(e)
-{
-        var target = $(e).attr('data-target');
-        var setting = $(e).attr('data-setting');
-        var id = $(e).attr('data-id');
-
-//        $('form[data-target="'+target+'"]').find('input[name="setting"]').attr('data-setting', setting);
-        $('form[data-target="'+target+'"]').attr('data-setting', setting);
-        $('form[data-target="'+target+'"]').attr('data-id', id);
-        $('form[data-target="'+target+'"]').find('input[type="file"]').click();
-}
-
-function easyLinksAddLink()
-{
-	$('#easyLinksAddLink_title').val('');
-	$('#easyLinksAddLink_url').val('');
-	$('#easyLinksAddLink_status').prop("checked", true);
-
-	$('#modal_easyLinksAddLink').modal('show');
-}
-</script>
-    
-</main>
-
-    <footer class="footer mt-auto py-3 bg-light">
-      <div class="container">
-            <div class="pull-left">
-              Copyright © Porkbun LLC; all rights reserved.
-              <br>
-              <small>Porkbun is a <a class="black" href="http://toplevel.design/" target="_blank">Top Level Design</a> brand.</small>
-              <br>
-              <small>Made in the USA</small>
+        
+        <div class="content">
+            <h2>Introduction</h2>
+            <p>Welcome to Kelga. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when you use our poultry farm management application.</p>
+            
+            <h2>Information We Collect</h2>
+            <p>We collect information that you provide directly to us, including:</p>
+            <ul>
+                <li>Account information (username, password, email address)</li>
+                <li>Farm business data (inventory, sales records, expenses)</li>
+                <li>Employee information (names, roles, salary data)</li>
+                <li>Financial transactions and accounting records</li>
+                <li>Device information for app optimization</li>
+            </ul>
+            
+            <h2>How We Use Your Information</h2>
+            <p>Your information is used exclusively to:</p>
+            <ul>
+                <li>Provide and maintain our farm management services</li>
+                <li>Process your business transactions and generate reports</li>
+                <li>Improve app functionality and user experience</li>
+                <li>Ensure data security and prevent unauthorized access</li>
+                <li>Provide customer support when requested</li>
+            </ul>
+            
+            <h2>Data Security</h2>
+            <p>We implement industry-standard security measures to protect your data, including:</p>
+            <ul>
+                <li>Encrypted data transmission and storage</li>
+                <li>Secure authentication with automatic lockout protection</li>
+                <li>Role-based access control for multi-user environments</li>
+                <li>Regular security updates and monitoring</li>
+            </ul>
+            
+            <h2>Data Sharing</h2>
+            <p>We do not sell, trade, or transfer your personal information to third parties. Your farm data remains confidential and is only accessible to authorized users within your organization. We may share information only when required by law or to protect our rights.</p>
+            
+            <h2>Data Retention</h2>
+            <p>We retain your information for as long as your account is active or as needed to provide you services. You may request deletion of your data at any time by contacting us directly.</p>
+            
+            <h2>Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access and receive a copy of your personal data</li>
+                <li>Correct any inaccurate information</li>
+                <li>Request deletion of your account and associated data</li>
+                <li>Export your business data in standard formats</li>
+                <li>Opt-out of any optional data collection</li>
+            </ul>
+            
+            <h2>Updates to This Policy</h2>
+            <p>We may update this privacy policy periodically. We will notify you of any changes by updating the effective date below and through in-app notifications for significant changes.</p>
+            
+            <h2>Contact Us</h2>
+            <p>If you have any questions about this privacy policy or our data practices, please contact us:</p>
+            
+            <div class="contact-section">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span class="contact-label">Email:</span>
+                        <span class="contact-value"><a href="mailto:karox.bestt@gmail.com">karox.bestt@gmail.com</a></span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label">Phone 1:</span>
+                        <span class="contact-value"><a href="tel:+9647502321637">+964 750 232 1637</a></span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label">Phone 2:</span>
+                        <span class="contact-value"><a href="tel:+9647734491531">+964 773 449 1531</a></span>
+                    </div>
+                </div>
             </div>
-      </div>
-    </footer>
-
-
-<script>
-$(document).ready(function()
-{
-        var csrfCookieValue = getCookie("csrf_cookie_1");
-        var csrfToken = "csrf_token_1";
-        var csrfString = '<input class="formCsrf" type="hidden" name="'+csrfToken+'" value="'+csrfCookieValue+'" />';
-
-        console.log("csrfCookieValue:"+csrfCookieValue);
-
-        $('form').append(csrfString);
-
-        $.ajaxSetup(
-        {
-                beforeSend:function(jqXHR, Obj)
-                {
-                        if(Obj.type != "GET")
-                        {
-                                csrfCookieValue = getCookie("csrf_cookie_1");
-                                csrfToken = "csrf_token_1";
-
-                                console.log("csrfCookieValue:"+csrfCookieValue);
-
-                                Obj.data += "&isajax=true&"+csrfToken+"="+csrfCookieValue;
-                        }
-                },
-                complete:function(jqXHR, stat)
-                {
-                        csrfCookieValue = getCookie("csrf_cookie_1");
-                        csrfToken = "csrf_token_1";
-
-                        console.log("csrfCookieValue:"+csrfCookieValue);
-
-                        $('.formCsrf').val(csrfCookieValue);
-                }
-        });
-
-	if(typeof onReady === "function")
-	{
-		onReady();
-	}
-});
-</script>
-
-  
-
-</body></html>
+            
+            <div class="effective-date">
+                Effective Date: January 1, 2025<br>
+                Last Updated: January 1, 2025
+            </div>
+        </div>
+    </div>
+</body>
+</html>
