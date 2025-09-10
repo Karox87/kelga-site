@@ -57,15 +57,51 @@
             margin-bottom: 50px;
         }
         
+        .download-section {
+            margin-bottom: 30px;
+        }
+        
+        .download-title {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .app-store-btn {
+            display: inline-block;
+            background: #000;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .app-store-btn:hover {
+            background: #111;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        
+        .app-store-btn svg {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        
         .links {
             display: flex;
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 40px;
+            margin: 30px 0;
         }
         
-        a {
+        .links a {
             color: white;
             text-decoration: none;
             padding: 15px 30px;
@@ -78,42 +114,10 @@
             min-width: 160px;
         }
         
-        a:hover {
+        .links a:hover {
             background: rgba(255,255,255,0.3);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .contact {
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .contact-title {
-            font-size: 1.1em;
-            margin-bottom: 15px;
-            opacity: 0.9;
-        }
-        
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            font-size: 0.95em;
-            opacity: 0.85;
-        }
-        
-        .contact-info a {
-            background: none;
-            padding: 5px;
-            min-width: auto;
-            display: inline;
-        }
-        
-        .contact-info a:hover {
-            background: rgba(255,255,255,0.1);
-            transform: none;
         }
         
         .features {
@@ -140,6 +144,39 @@
             opacity: 0.9;
         }
         
+        .contact {
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+        
+        .contact-title {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.95em;
+            opacity: 0.85;
+        }
+        
+        .contact-info a {
+            color: white;
+            background: none;
+            padding: 5px;
+            min-width: auto;
+            display: inline;
+            text-decoration: none;
+        }
+        
+        .contact-info a:hover {
+            background: rgba(255,255,255,0.1);
+            transform: none;
+        }
+        
         /* Mobile Responsive */
         @media (max-width: 600px) {
             h1 {
@@ -163,7 +200,7 @@
                 width: 100%;
             }
             
-            a {
+            .links a {
                 width: 100%;
                 padding: 18px 30px;
                 font-size: 1.1em;
@@ -190,7 +227,7 @@
                 font-size: 0.95em;
             }
             
-            a {
+            .links a {
                 padding: 16px 20px;
                 font-size: 1em;
             }
@@ -216,9 +253,10 @@
         .logo { animation-delay: 0.1s; }
         h1 { animation-delay: 0.2s; }
         .tagline { animation-delay: 0.3s; }
-        .links { animation-delay: 0.4s; }
-        .features { animation-delay: 0.5s; }
-        .contact { animation-delay: 0.6s; }
+        .download-section { animation-delay: 0.4s; }
+        .links { animation-delay: 0.5s; }
+        .features { animation-delay: 0.6s; }
+        .contact { animation-delay: 0.7s; }
     </style>
 </head>
 <body>
@@ -229,6 +267,16 @@
         
         <h1>Kelga</h1>
         <p class="tagline">Professional Poultry Farm Management System</p>
+        
+        <div class="download-section">
+            <p class="download-title">Download Now</p>
+            <a href="https://apps.apple.com/iq/app/kelga/id6752225782" class="app-store-btn" target="_blank">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                Download on App Store
+            </a>
+        </div>
         
         <div class="links">
             <a href="/privacy.html">Privacy Policy</a>
