@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ku">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelga - Poultry Farm Management</title>
+    <title>Kelga - سیستەمی بەڕێوەبردنی کێڵگەی پەلەوەر</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="logo.png">
     <style>
@@ -29,6 +29,37 @@
         .container {
             max-width: 600px;
             width: 100%;
+        }
+        
+        /* Language Selector */
+        .lang-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .lang-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .lang-btn.active {
+            background: rgba(255,255,255,0.4);
+            font-weight: bold;
         }
         
         .logo {
@@ -67,8 +98,16 @@
             opacity: 0.9;
         }
         
-        .app-store-btn {
-            display: inline-block;
+        .download-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .app-store-btn, .google-play-btn {
+            display: inline-flex;
+            align-items: center;
             background: #000;
             color: white;
             padding: 14px 28px;
@@ -76,21 +115,39 @@
             text-decoration: none;
             transition: all 0.3s ease;
             border: 1px solid rgba(255,255,255,0.2);
+            min-width: 200px;
+            justify-content: center;
         }
         
-        .app-store-btn:hover {
+        .app-store-btn:hover, .google-play-btn:hover {
             background: #111;
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             border: 1px solid rgba(255,255,255,0.4);
         }
         
-        .app-store-btn svg {
+        .google-play-btn {
+            background: #01875f;
+        }
+        
+        .google-play-btn:hover {
+            background: #017a55;
+        }
+        
+        .app-store-btn svg, .google-play-btn svg {
             width: 20px;
             height: 20px;
             display: inline-block;
             vertical-align: middle;
             margin-right: 10px;
+        }
+        
+        [lang="ku"] .app-store-btn svg, 
+        [lang="ar"] .app-store-btn svg,
+        [lang="ku"] .google-play-btn svg, 
+        [lang="ar"] .google-play-btn svg {
+            margin-right: 0;
+            margin-left: 10px;
         }
         
         .links {
@@ -177,8 +234,36 @@
             transform: none;
         }
         
+        /* RTL Support */
+        [lang="ku"], [lang="ar"] {
+            direction: rtl;
+        }
+        
+        [lang="ku"] .lang-selector,
+        [lang="ar"] .lang-selector {
+            right: auto;
+            left: 20px;
+        }
+        
         /* Mobile Responsive */
         @media (max-width: 600px) {
+            .lang-selector {
+                top: 10px;
+                right: 10px;
+                gap: 5px;
+            }
+            
+            [lang="ku"] .lang-selector,
+            [lang="ar"] .lang-selector {
+                right: auto;
+                left: 10px;
+            }
+            
+            .lang-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
             h1 {
                 font-size: 2.2em;
             }
@@ -192,6 +277,16 @@
                 width: 100px;
                 height: 100px;
                 font-size: 2.5em;
+            }
+            
+            .download-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .app-store-btn, .google-play-btn {
+                width: 100%;
+                padding: 16px 28px;
             }
             
             .links {
@@ -260,55 +355,111 @@
     </style>
 </head>
 <body>
+    <!-- Language Selector -->
+    <div class="lang-selector">
+        <button class="lang-btn active" onclick="changeLanguage('ku')">کوردی</button>
+        <button class="lang-btn" onclick="changeLanguage('ar')">عربی</button>
+        <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+    </div>
+    
     <div class="container">
         <div class="logo">
             <img src="logo.png" alt="Kelga" style="width: 100%; height: 100%; object-fit: contain; border-radius: 20px;">
         </div>
         
         <h1>Kelga</h1>
-        <p class="tagline">Professional Poultry Farm Management System</p>
+        <p class="tagline" data-ku="سیستەمی پرۆفیشناڵ بۆ بەڕێوەبردنی کێڵگەی پەلەوەر" 
+           data-ar="نظام احترافي لإدارة مزارع الدواجن"
+           data-en="Professional Poultry Farm Management System">
+           سیستەمی پرۆفیشناڵ بۆ بەڕێوەبردنی کێڵگەی پەلەوەر
+        </p>
         
         <div class="download-section">
-            <p class="download-title">Download Now</p>
-            <a href="https://apps.apple.com/iq/app/kelga/id6752225782" class="app-store-btn" target="_blank">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                </svg>
-                Download on App Store
-            </a>
+            <p class="download-title" data-ku="ئێستا دایبەزێنە" data-ar="حمل الآن" data-en="Download Now">ئێستا دایبەزێنە</p>
+            <div class="download-buttons">
+                <a href="https://apps.apple.com/iq/app/kelga/id6752225782" class="app-store-btn" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    <span data-ku="دایبەزێنە لە App Store" data-ar="حمل من App Store" data-en="Download on App Store">دایبەزێنە لە App Store</span>
+                </a>
+                <a href="https://play.google.com/apps/testing/com.karoxghafoor.kelga" class="google-play-btn" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 20.5v-17c0-.59.34-1.11.84-1.35L13.69 12l-9.85 9.85c-.5-.24-.84-.76-.84-1.35M16.81 15.12L6.05 21.34l7.54-7.54 3.22 3.32M14.54 12l3.75-3.75L6.04 2.66l8.49 8.49.01.85M20.16 10.81c.5.28.84.76.84 1.19s-.34.91-.84 1.19l-3.18 1.62-3.52-3.52 3.5-3.5 3.2 1.62v.4z"/>
+                    </svg>
+                    <span data-ku="دایبەزێنە لە Google Play" data-ar="حمل من Google Play" data-en="Download on Google Play">دایبەزێنە لە Google Play</span>
+                </a>
+            </div>
         </div>
         
         <div class="links">
-            <a href="/privacy.html">Privacy Policy</a>
-            <a href="/terms.html">Terms of Service</a>
+            <a href="/privacy.html" data-ku="سیاسەتی تایبەتێتی" data-ar="سياسة الخصوصية" data-en="Privacy Policy">سیاسەتی تایبەتێتی</a>
+            <a href="/terms.html" data-ku="مەرجەکانی خزمەتگوزاری" data-ar="شروط الخدمة" data-en="Terms of Service">مەرجەکانی خزمەتگوزاری</a>
         </div>
         
         <div class="features">
             <div class="feature">
                 <div class="feature-icon">📊</div>
-                <div class="feature-text">Smart Reports</div>
+                <div class="feature-text" data-ku="ڕاپۆرتی زیرەک" data-ar="تقارير ذكية" data-en="Smart Reports">ڕاپۆرتی زیرەک</div>
             </div>
             <div class="feature">
                 <div class="feature-icon">🐔</div>
-                <div class="feature-text">Inventory Tracking</div>
+                <div class="feature-text" data-ku="بەدواداچوونی کۆگا" data-ar="تتبع المخزون" data-en="Inventory Tracking">بەدواداچوونی کۆگا</div>
             </div>
             <div class="feature">
                 <div class="feature-icon">💰</div>
-                <div class="feature-text">Financial Management</div>
+                <div class="feature-text" data-ku="بەڕێوەبردنی دارایی" data-ar="الإدارة المالية" data-en="Financial Management">بەڕێوەبردنی دارایی</div>
             </div>
             <div class="feature">
                 <div class="feature-icon">👥</div>
-                <div class="feature-text">Multi-User Access</div>
+                <div class="feature-text" data-ku="دەستڕاگەیشتنی فرە بەکارهێنەر" data-ar="وصول متعدد المستخدمين" data-en="Multi-User Access">دەستڕاگەیشتنی فرە بەکارهێنەر</div>
             </div>
         </div>
         
         <div class="contact">
-            <p class="contact-title">Contact Us</p>
+            <p class="contact-title" data-ku="پەیوەندیمان پێوە بکە" data-ar="اتصل بنا" data-en="Contact Us">پەیوەندیمان پێوە بکە</p>
             <div class="contact-info">
-                <div>Email: <a href="mailto:karox.bestt@gmail.com">karox.bestt@gmail.com</a></div>
-                <div>Phone: <a href="tel:+9647502321637">+964 750 232 1637</a></div>
+                <div><span data-ku="ئیمێڵ:" data-ar="البريد الإلكتروني:" data-en="Email:">ئیمێڵ:</span> <a href="mailto:karox.bestt@gmail.com">karox.bestt@gmail.com</a></div>
+                <div><span data-ku="تەلەفۆن:" data-ar="الهاتف:" data-en="Phone:">تەلەفۆن:</span> <a href="tel:+9647502321637">+964 750 232 1637</a></div>
             </div>
         </div>
     </div>
+    
+    <script>
+        function changeLanguage(lang) {
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update page title
+            const titles = {
+                'ku': 'Kelga - سیستەمی بەڕێوەبردنی کێڵگەی پەلەوەر',
+                'ar': 'Kelga - نظام إدارة مزارع الدواجن',
+                'en': 'Kelga - Poultry Farm Management System'
+            };
+            document.title = titles[lang];
+            
+            // Update all text elements
+            document.querySelectorAll('[data-' + lang + ']').forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+            
+            // Save preference
+            localStorage.setItem('preferredLang', lang);
+        }
+        
+        // Load saved language preference
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferredLang') || 'ku';
+            if (savedLang !== 'ku') {
+                changeLanguage(savedLang);
+                document.querySelector(`.lang-btn[onclick*="${savedLang}"]`).classList.add('active');
+                document.querySelector('.lang-btn.active').classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
